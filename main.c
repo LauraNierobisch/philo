@@ -1,22 +1,19 @@
+#include "philo.h"
+
 int main(int argc, char *argv[])
 {
-	if(argc == 5)
+	t_table table;
+	if((argc == 5)|| (argc == 6))
 	{
-		checking_arg(argc, &argv);
+		parse_input(&table,argv);
+		//data_init(&table);
+		//dinner_start(&table);
+		//clean(&table);
 	}
-}
-int checking_arg(int argc, char *argv[])
-{
-	if(!ft_isdigit(argv[1]))
+	else 
 	{
-		printf("Error: only numbers for number of Philosophers please!");
+		printf("Error: 5 or 6 arguments are needed please!");
 		return(1);
 	}
-	if(argv[1] > 200)
-	{
-		printf("Error: only numbers under 200 please!");
-		return(1);
-	}
-	
-
+	return(0);
 }

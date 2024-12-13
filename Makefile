@@ -1,40 +1,41 @@
-SRCS = main.c
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lnierobi <lnierobi@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/07/10 10:34:37 by lnierobi          #+#    #+#              #
+#    Updated: 2024/08/01 15:20:57 by lnierobi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-OBJS = $(addprefix build/,$(SRCS:.c=.o))
+PHILO_SRCS	=	main.c parsing_input.c 
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+PUSH = $(PHILO_SRCS:.c=.o)
+SERVER_OBJS = $(SERVER_SRCS:.c=.o)
 
-RM = rm -rf
+CC		= cc
+CFLAGS	= -Wall -Wextra -Werror -g
 
-LIBFT_DIR = libft
-LIBFT_REPO = https://github.com/LauraNierobisch/libft.git
-LIBFT_LIB = $(LIBFT_DIR)/libft.a
+RM		= rm -f
 
-PUSHSWAP = build/push_swap
 
-all: build $(LIBFT_LIB) $(PHILO)
+PHILO = philo
 
-build:
-	@mkdir -p build
 
-build/.c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+all: $(PHILO)
 
-$(PHILO): $(PUSH_OBJS) $(LIBFT_LIB)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $@
+%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@ -g
 
-$(LIBFT_LIB):
-	@if [ ! -d $(LIBFT_DIR) ]; then \
-		git clone $(LIBFT_REPO) $(LIBFT_DIR); \
-	fi
-	make -C $(LIBFT_DIR)
+$(PHILO): $(PUSH) $(LIBS)
+		$(CC) $(CFLAGS) $(PUSH) $(LIBS) -o $(PHILO) -g
 
 clean:
-	$(RM) build
-	make clean -C $(LIBFT_DIR)
+		$(RM) $(PUSH) $(SERVER_OBJS)
 
 fclean: clean
-	$(RM) $(LIBFT_DIR)
+		$(RM) $(PHILO) $(SERVER)
 
-re: fclean all
+re:	fclean all
