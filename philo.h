@@ -7,6 +7,17 @@
 #include<pthread.h>
 #include<sys/time.h>
 #include<limits.h>
+#include<errno.h>
+
+enum e_opcode 
+{
+    LOCK,
+    UNLOCK,
+    INIT,
+    DESTROY,
+    JOIN,
+    DETACH,
+} t_opcode;
 
 typedef pthread_mutex_t t_mtx;
 
