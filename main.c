@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 	if((argc == 5)|| (argc == 6))
 	{
 		parse_input(&table,argv);
-		//data_init(&table);
+		data_init(&table);
 		//dinner_start(&table);
 		//clean(&table);
 	}
