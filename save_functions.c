@@ -7,7 +7,7 @@ void *save_malloc(size_t bytes)
     if(NULL == ret)
         {
             printf("malloc Error");
-            return(0);
+            return;
         }
     return(ret);
 }
@@ -18,32 +18,32 @@ static void handle_mutex_error(int status, t_opcode opcode)
     if(EINVAL == status && (LOCK == opcode || UNLOCK == opcode || DESTROY == opcode))
     {
         printf("the value specified by mutex is invalid");
-        return(1);
+        return;
     }
     else if (EINVAL == status && INIT == opcode)
     {
         printf("the value specified by attr is invalid");
-        return(1);
+        return;
     }
     else if (EDEADLK == status)
     {
         printf("deadlock would occure");
-        return(1);
+        return;
     }
     else if(EPERM == status)
     {
         printf("the current thread  does not hold a lock on mutex");
-        return(1);
+        return;
     }
     else if(ENOMEM == status)
     {
         printf("the process can not alocate enought memory to create another mutex");
-        return(1);   
+        return;   
     }
     else if(EBUSY == status)
     {
         printf("mutex is locked");
-        return(1);
+        return;
     }
 }
 void safe_mutex_handle(t_mtx *mutex, t_opcode opcode)
@@ -59,6 +59,45 @@ void safe_mutex_handle(t_mtx *mutex, t_opcode opcode)
     else 
     {
         printf("Wrong opcode for mutex!");
+        return(1);
+    }
+}
+static void handle_thread_error(int status, t_opcode opcode)
+{
+    if(0 == status)
+        return;
+    if(EAGAIN == status)
+    {
+        printf("Error no resurce to build another thread");
+        return(1);
+    }
+    else if(EPERM == status)
+    {
+        printf("Tthe caller does not have appropriate permission");
+    }
+    else if(EINVAL == status && CREATE == opcode)
+        printf("The value specified by attr is invalid");
+    else if(EINVAL == status && (JOIN == opcode || DETACH == opcode))
+        printf("The value speciefied by the thread is not joinable");
+    else if (ESRCH == status)
+        printf("no thread could be found corresponding to that to the ID thread");
+    else if(EDEADLK == status)
+    {
+        printf("Error deadlock was detected");
+    }
+
+}
+void safe_thread_handle(pthread_t *thread, void *(*foo)(void*), void *data, t_opcode opcode)
+{
+    if(CREATE == opcode)
+        handle_thread_error(pthread_create(thread,NULL, foo, data),opcode);
+    else if(JOIN == opcode)
+        handle_thread_error(pthread_join(*thread, NULL),opcode);
+    else if(DETACH == opcode)
+        handle_thread_error(pthread_detach(*thread), opcode);
+    else 
+    {
+        printf("Wrong opcode for thread_handle");
         return(1);
     }
 }

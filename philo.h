@@ -9,7 +9,7 @@
 #include<limits.h>
 #include<errno.h>
 
-enum e_opcode 
+typedef enum e_opcode 
 {
     LOCK,
     UNLOCK,
@@ -17,6 +17,7 @@ enum e_opcode
     DESTROY,
     JOIN,
     DETACH,
+    CREATE,
 } t_opcode;
 
 typedef pthread_mutex_t t_mtx;
@@ -33,9 +34,10 @@ typedef struct s_philo
     long meal_counter;
     bool full;
     long last_meal_time;
-    t_fork  *left_fork;
-    t_fork  *right_fork;
+    t_fork  *first_fork;
+    t_fork  *second_fork;
     pthread_t thread_id;
+    t_table *table;
 }   t_philo;
 
 typedef struct s_table
@@ -52,5 +54,9 @@ typedef struct s_table
 } t_table;
 
 void    parse_input(t_table *table, char *argv[]);
+void *save_malloc(size_t bytes);
+void safe_mutex_handle(t_mtx *mutex, t_opcode opcode);
+void safe_thread_handle(pthread_t *thread, void *(*foo)(void*), void *data, t_opcode opcode);
+
 
 #endif
