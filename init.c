@@ -21,7 +21,7 @@ static void philo_init(t_table *table)
     i = -1;
     while(++i < table->philo_nbr)
     {
-        philo = table -> philos + i;
+        philo = table -> philo + i;
         philo->id = i+1;
         philo->full = false;
         philo-> meal_counter = 0;
@@ -34,7 +34,9 @@ void data_init(t_table *table)
     int i;
     i =  -1;
     table->end_simulation = false;
-    table->philos = safe_malloc(sizeof(t_philo) * table-> philo_nbr);
+    table->all_threads_ready = false;
+    table->philo = safe_malloc(sizeof(t_philo) * table-> philo_nbr);
+    safe_mutex_handle(table->table_mutex, INIT);
     table->forks = safe_malloc(sizeof(t_fork) * table->philo_nbr);
     while(++i < table ->philo_nbr)
     {

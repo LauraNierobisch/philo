@@ -67,24 +67,17 @@ static void handle_thread_error(int status, t_opcode opcode)
     if(0 == status)
         return;
     if(EAGAIN == status)
-    {
-        printf("Error no resurce to build another thread");
-        return(1);
-    }
+        error_exit("Error no resurce to build another thread");
     else if(EPERM == status)
-    {
-        printf("Tthe caller does not have appropriate permission");
-    }
+        error_exit("Tthe caller does not have appropriate permission");
     else if(EINVAL == status && CREATE == opcode)
-        printf("The value specified by attr is invalid");
+        error_exit("The value specified by attr is invalid");
     else if(EINVAL == status && (JOIN == opcode || DETACH == opcode))
-        printf("The value speciefied by the thread is not joinable");
+        error_exit("The value speciefied by the thread is not joinable");
     else if (ESRCH == status)
-        printf("no thread could be found corresponding to that to the ID thread");
+        error_exit("no thread could be found corresponding to that to the ID thread");
     else if(EDEADLK == status)
-    {
-        printf("Error deadlock was detected");
-    }
+        error_exit("Error deadlock was detected");
 
 }
 void safe_thread_handle(pthread_t *thread, void *(*foo)(void*), void *data, t_opcode opcode)
@@ -97,7 +90,6 @@ void safe_thread_handle(pthread_t *thread, void *(*foo)(void*), void *data, t_op
         handle_thread_error(pthread_detach(*thread), opcode);
     else 
     {
-        printf("Wrong opcode for thread_handle");
-        return(1);
+        error_exit("Wrong opcode for thread_handle");
     }
 }
