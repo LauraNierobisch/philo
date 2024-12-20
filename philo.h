@@ -9,6 +9,18 @@
 #include<limits.h>
 #include<errno.h>
 
+#define DEBUG_MODE 0
+
+typedef enum e_status
+{
+    EATING,
+    SLEEPING,
+    THINKING,
+    TAKE_FIRST_FORK,
+    TAKE_SECOND_FORK,
+    DIED,
+}   t_philo_status;
+
 
 typedef enum e_opcode 
 {
@@ -35,19 +47,10 @@ typedef struct s_fork
     int fork_id;
 }   t_fork;
 
-typedef struct s_philo
-{
-    int id;
-    long meal_counter;
-    bool full;
-    long last_meal_time;
-    t_fork  *first_fork;
-    t_fork  *second_fork;
-    pthread_t thread_id;
-    t_table *table;
-}   t_philo;
+typedef struct s_philo;
+typedef struct s_philo;
 
-typedef struct s_table
+struct s_table
 {
     long philo_nbr;
     long time_to_die;
@@ -58,9 +61,24 @@ typedef struct s_table
     bool end_simulation;
     bool all_threads_ready;
     t_mtx table_mutex;
+    t_mtx write_mutex;
     t_fork *forks;
     t_philo **philo;
 } t_table;
+
+struct s_philo
+{
+    int id;
+    long meal_counter;
+    bool full;
+    long last_meal_time;
+    t_fork  *first_fork;
+    t_fork  *second_fork;
+    pthread_t thread_id;
+    t_mtx philo_mutex;
+    t_table *table;
+}   t_philo;
+
 
 void    parse_input(t_table *table, char *argv[]);
 void    *save_malloc(size_t bytes);
@@ -74,4 +92,7 @@ void set_long(t_mtx *mutex, long *dest, long value);
 bool simualtaion_finished(t_table *table);
 void wait_all_threads(t_table *table);
 int error_exit(const char *error);
+long gettime(t_time_code time_code);
+void precised_usleep(long usec, t_table *table);
+void write_status(t_philo_status status, t_philo *philo);
 #endif
