@@ -79,12 +79,11 @@ typedef struct					s_table
 	t_philo				*philo;
 }						t_table;
 
-void					parse_input(t_table *table, char *argv[]);
-int					*save_malloc(size_t bytes);
-void					save_mutex_handle(t_mtx *mutex, t_opcode opcode);
+int					parse_input(t_table *table, char *argv[]);
+void					*save_malloc(size_t bytes);
+int					save_mutex_handle(t_mtx *mutex, t_opcode opcode);
 void					safe_thread_handle(pthread_t *thread,
 							void *(*foo)(void *), void *data, t_opcode opcode);
-void					data_init(t_table *table);
 void					set_bool(t_mtx *mutex, bool *dest, bool value);
 bool					get_bool(t_mtx *mutex, bool *value);
 long					get_long(t_mtx *mutex, long *value);
@@ -96,6 +95,6 @@ long					gettime(t_time_code time_code);
 // void					precised_usleep(long usec, t_table *table);
 void precised_usleep(long usec, t_table *table);
 void					write_status(t_philo_status status, t_philo *philo);
-void					data_init(t_table *table);
-void					save_mutex_handle(t_mtx *mutex, t_opcode opcode);
+int					data_init(t_table *table);
+void					dinner_start(t_table *table);
 #endif

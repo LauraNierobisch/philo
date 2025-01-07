@@ -5,9 +5,11 @@ int	main(int argc, char *argv[])
 	t_table table;
 	if ((argc == 5) || (argc == 6))
 	{
-		parse_input(&table, argv);
-		data_init(&table);
-		// dinner_start(&table);
+		if (parse_input(&table, argv) == 1)
+			return (1);
+		if(data_init(&table) == 1)
+			return(1);
+		dinner_start(&table);
 		// clean(&table);
 	}
 	else

@@ -28,12 +28,12 @@ static const char	*valid_input(const char *str)
 		++str;
 	else if (*str == '-')
 	{
-		printf("ERROR: Please only positive numbers!\n");
+		error_exit("ERROR: Please only positive numbers!\n");
 		return (NULL);
 	}
 	if (!is_digit(*str))
 	{
-		printf("ERROR: Please only numbers!\n");
+		error_exit("ERROR: Please only numbers!\n");
 		return (NULL);
 	}
 	num = str;
@@ -41,7 +41,7 @@ static const char	*valid_input(const char *str)
 		++len;
 	if (len > 10)
 	{
-		printf("ERROR: Please only numbers under MAX_INT\n");
+		error_exit("ERROR: Please only numbers under MAX_INT\n");
 		return (NULL);
 	}
 	return (num);
@@ -59,13 +59,13 @@ static long	ft_atol(const char *str)
 		num = (num * 10) + (*str++ - '0');
 	if (num > INT_MAX)
 	{
-		printf("ERROR: Please only numbers under MAX_INT\n");
+		error_exit("ERROR: Please only numbers under MAX_INT\n");
 		return (-1);
 	}
 	return (num);
 }
 
-void	parse_input(t_table *table, char *argv[])
+int	parse_input(t_table *table, char *argv[])
 {
 	table->philo_nbr = ft_atol(argv[1]);
 	table->time_to_die = ft_atol(argv[2]) * 1000;
@@ -79,7 +79,7 @@ void	parse_input(t_table *table, char *argv[])
 		|| table->time_to_sleep < 60000)
 	{
 		printf("ERROR: please use Timestamps > 60ms!\n");
-		return ;
+		return 1;
 	}
 	if (argv[5])
 	{
@@ -87,4 +87,5 @@ void	parse_input(t_table *table, char *argv[])
 	}
 	else
 		table->nbr_limit_meals = -1;
+	return 0;
 }
