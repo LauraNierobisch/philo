@@ -6,11 +6,12 @@
 #    By: lnierobi <lnierobi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/10 10:34:37 by lnierobi          #+#    #+#              #
-#    Updated: 2024/08/01 15:20:57 by lnierobi         ###   ########.fr        #
+#    Updated: 2025/01/07 11:39:02 by lnierobi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PHILO_SRCS	=	main.c parsing_input.c 
+PHILO_SRCS	=	main.c parsing_input.c init.c dinner.c getters_setters.c \
+save_functions.c synchro_utils.c write.c utils.c
 
 PUSH = $(PHILO_SRCS:.c=.o)
 SERVER_OBJS = $(SERVER_SRCS:.c=.o)
