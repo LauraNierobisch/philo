@@ -43,5 +43,5 @@ void	precised_usleep(long usec, t_table *table)
 int	error_exit(const char *error)
 {
 	printf("Error:%s \n", error);
-	return (1);
+	exit(1);
 }

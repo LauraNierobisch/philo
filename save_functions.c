@@ -14,37 +14,32 @@ void	*save_malloc(size_t bytes)
 static int	handle_mutex_error(int status, t_opcode opcode)
 {
 	if (0 == status)
-		return(1) ;
-	if (EINVAL == status && (LOCK == opcode || UNLOCK == opcode
-			|| DESTROY == opcode))
-	{
-		error_exit("the value specified by mutex is invalid");
-		return(1);
-	}
+		return (0);
+	// if (EINVAL == status && (LOCK == opcode || UNLOCK == opcode))
+	// 		//|| DESTROY == opcode))
+	// {
+	// 	error_exit("the value specified by mutex is invalid");
+	// }
 	else if (EINVAL == status && INIT == opcode)
 	{
 		error_exit("the value specified by attr is invalid");
-		return (1);
 	}
 	else if (EDEADLK == status)
 	{
 		error_exit("deadlock would occure");
-		return (1);
 	}
 	else if (EPERM == status)
 	{
 		error_exit("the current thread  does not hold a lock on mutex");
-		return (1);
 	}
 	else if (ENOMEM == status)
 	{
 		error_exit("the process can not alocate enought memory to create another mutex");
-		return (1);
+
 	}
 	else if (EBUSY == status)
 	{
 		error_exit("mutex is locked");
-		return (1);
 	}
 	return(0);
 }
@@ -52,23 +47,19 @@ int	save_mutex_handle(t_mtx *mutex, t_opcode opcode)
 {
 	if (LOCK == opcode)
 	{
-		if(handle_mutex_error(pthread_mutex_lock(mutex), opcode) == 1)
-			return(1);
+		handle_mutex_error(pthread_mutex_lock(mutex), opcode);
 	}
 	else if (UNLOCK == opcode)
 	{
-		if(handle_mutex_error(pthread_mutex_unlock(mutex), opcode) == 1)
-			return(1);
+		handle_mutex_error(pthread_mutex_unlock(mutex), opcode);
 	}
 	else if (INIT == opcode)
 {
-		if(handle_mutex_error(pthread_mutex_init(mutex, NULL), opcode) == 1)
-			return(1);
+		handle_mutex_error(pthread_mutex_init(mutex, NULL), opcode);
 }
 	else if (DESTROY == opcode)
 	{
-		if(handle_mutex_error(pthread_mutex_destroy(mutex), opcode) == 1)
-			return(1);
+		handle_mutex_error(pthread_mutex_destroy(mutex), opcode);
 	}
 	else
 	{
